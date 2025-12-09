@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻传播学院点名系统</title>
+    <style>
+        /* 复古色系 */
+        :root {
+            --primary-color: #8B4513; /* 马鞍棕色 */
+            --secondary-color: #D2B48C; /* 卡其色 */
+            --accent-color: #CD853F; /* 秘鲁色 */
+            --light-color: #F5F5DC; /* 米色 */
+            --dark-color: #654321; /* 深棕色 */
+            --text-color: #3E2723; /* 深褐色 */
+            --present-color: #2E8B57; /* 海绿色 - 出席 */
+            --absent-color: #B22222; /* 耐火砖红 - 缺席 */
+        }
+        
+        body {
+            font-family: "SimSun", "宋体", serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d2b48c' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px dashed var(--accent-color);
+            padding-bottom: 15px;
+        }
+        
+        h1 {
+            color: var(--dark-color);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            font-style: italic;
+            color: var(--accent-color);
+            font-size: 1.2em;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1em;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .random-result {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .rolling-container {
+            position: relative;
+            height: 150px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .rolling-names {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            transition: transform 0.1s ease-out;
+        }
+        
+        .name-item {
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--dark-color);
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+        
+        .name-item.active {
+            opacity: 1;
+            font-size: 3em;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .student-info {
+            font-size: 1.2em;
+            color: var(--text-color);
+            margin-top: 10px;
+        }
+        
+        .student-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .student-card {
+            background-color: var(--light-color);
+            border: 1px solid var(--accent-color);
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .student-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .student-card.selected {
+            background-color: var(--secondary-color);
+            border-color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .student-card.present {
+            border-left: 5px solid var(--present-color);
+        }
+        
+        .student-card.absent {
+            border-left: 5px solid var(--absent-color);
+        }
+        
+        .student-name {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .student-id {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .attendance-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .attendance-btn {
+            padding: 6px 12px;
+            font-size: 0.9em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .present-btn {
+            background-color: var(--present-color);
+            color: white;
+        }
+        
+        .present-btn:hover {
+            background-color: #26734d;
+        }
+        
+        .absent-btn {
+            background-color: var(--absent-color);
+            color: white;
+        }
+        
+        .absent-btn:hover {
+            background-color: #9a1c1c;
+        }
+        
+        .status-indicator {
+            font-size: 0.8em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        .status-present {
+            background-color: var(--present-color);
+            color: white;
+        }
+        
+        .status-absent {
+            background-color: var(--absent-color);
+            color: white;
+        }
+        
+        .attendance-stats {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--accent-color);
+            color: var(--accent-color);
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .student-list {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .name-item {
+                font-size: 2em;
+            }
+            
+            .name-item.active {
+                font-size: 2.2em;
+            }
+            
+            .attendance-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>新闻传播学院点名系统</h1>
+            <div class="subtitle">复古风格 · 单人标记 · 直观操作</div>
+        </header>
+        
+        <div class="controls">
+            <button id="startRollBtn">开始滚动点名</button>
+            <button id="stopRollBtn" disabled>停止</button>
+            <button id="resetBtn">重置点名</button>
+            <button id="markAllBtn">标记全部出席</button>
+            <button id="markNoneBtn">标记全部缺席</button>
+        </div>
+        
+        <div class="random-result">
+            <div class="rolling-container">
+                <div class="rolling-names" id="rollingNames">
+                    <!-- 名字将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            <div class="student-info" id="studentInfo">-</div>
+        </div>
+        
+        <div class="attendance-stats">
+            <div>出勤统计：<span id="presentCount">0</span> / <span id="totalCount">48</span></div>
+            <div>出勤率：<span id="attendanceRate">0%</span></div>
+        </div>
+        
+        <div class="student-list" id="studentList">
+            <!-- 学生列表将通过JavaScript动态生成 -->
+        </div>
+        
+        <footer>
+            <p>新闻传播学院 © 2023 | 复古风格点名系统</p>
+        </footer>
+    </div>
+
+    <script>
+        // 学生数据
+        const students = [
+            { id: 1, name: "刘果彧", studentId: "2024106005", present: false },
+            { id: 2, name: "郑舒心", studentId: "2024106011", present: false },
+            { id: 3, name: "白宇曦", studentId: "2024106015", present: false },
+            { id: 4, name: "张媛媛", studentId: "2024106021", present: false },
+            { id: 5, name: "于梦欢", studentId: "2024106025", present: false },
+            { id: 6, name: "张梦宇", studentId: "2024106029", present: false },
+            { id: 7, name: "耿铂涵", studentId: "2024106031", present: false },
+            { id: 8, name: "邱怀瑾", studentId: "2024106034", present: false },
+            { id: 9, name: "李寓欣", studentId: "2024106036", present: false },
+            { id: 10, name: "杜筱曼", studentId: "2024106040", present: false },
+            { id: 11, name: "张延蓉", studentId: "2024106042", present: false },
+            { id: 12, name: "刘娱菲", studentId: "2024106043", present: false },
+            { id: 13, name: "王枝怡", studentId: "2024106046", present: false },
+            { id: 14, name: "李子默", studentId: "2024106047", present: false },
+            { id: 15, name: "李昱潼", studentId: "2024106053", present: false },
+            { id: 16, name: "李冠颉", studentId: "2024106054", present: false },
+            { id: 17, name: "李佳瑶", studentId: "2024106068", present: false },
+            { id: 18, name: "邹佳彤", studentId: "2024106069", present: false },
+            { id: 19, name: "张曦月", studentId: "2024106071", present: false },
+            { id: 20, name: "雷湘", studentId: "2024106073", present: false },
+            { id: 21, name: "杨雪琴", studentId: "2024106074", present: false },
+            { id: 22, name: "程赟菲", studentId: "2024106075", present: false },
+            { id: 23, name: "张王玉", studentId: "2024106077", present: false },
+            { id: 24, name: "杨本钰", studentId: "2024106078", present: false },
+            { id: 25, name: "高静怡", studentId: "2024106079", present: false },
+            { id: 26, name: "李丹", studentId: "2024106080", present: false },
+            { id: 27, name: "汪培", studentId: "2024106081", present: false },
+            { id: 28, name: "马芙蓉", studentId: "2024106083", present: false },
+            { id: 29, name: "张若兮", studentId: "2024106084", present: false },
+            { id: 30, name: "王歌璇", studentId: "2024106085", present: false },
+            { id: 31, name: "王蒙", studentId: "2024106086", present: false },
+            { id: 32, name: "李欣", studentId: "2024106087", present: false },
+            { id: 33, name: "左明颖", studentId: "2024106088", present: false },
+            { id: 34, name: "吴昕昱", studentId: "2024106089", present: false },
+            { id: 35, name: "张丹", studentId: "2024106090", present: false },
+            { id: 36, name: "格桑拉姆", studentId: "2024106093", present: false },
+            { id: 37, name: "李玥潼", studentId: "2024106094", present: false },
+            { id: 38, name: "杨丽", studentId: "2024106097", present: false },
+            { id: 39, name: "马国森", studentId: "2024106098", present: false },
+            { id: 40, name: "王怀玉", studentId: "2024106099", present: false },
+            { id: 41, name: "刘存帅", studentId: "2024106100", present: false },
+            { id: 42, name: "符佳豪", studentId: "2024106103", present: false },
+            { id: 43, name: "孙梓卿", studentId: "2024106104", present: false },
+            { id: 44, name: "马晨皓", studentId: "2024106112", present: false },
+            { id: 45, name: "张洛闻", studentId: "2024106113", present: false },
+            { id: 46, name: "扎西", studentId: "2024106115", present: false },
+            { id: 47, name: "曹鑫鑫", studentId: "2024106116", present: false },
+            { id: 48, name: "帕尔哈提江·麦图荪", studentId: "2024106118", present: false }
+        ];
+
+        // 当前选中的学生
+        let currentStudent = null;
+        // 滚动相关变量
+        let isRolling = false;
+        let rollInterval;
+        let rollSpeed = 50; // 初始滚动速度(ms)
+        let currentRollIndex = 0;
+
+        // 初始化函数
+        function init() {
+            renderStudentList();
+            renderRollingNames();
+            updateStats();
+            
+            // 添加事件监听器
+            document.getElementById('startRollBtn').addEventListener('click', startRolling);
+            document.getElementById('stopRollBtn').addEventListener('click', stopRolling);
+            document.getElementById('resetBtn').addEventListener('click', resetAttendance);
+            document.getElementById('markAllBtn').addEventListener('click', markAllPresent);
+            document.getElementById('markNoneBtn').addEventListener('click', markNonePresent);
+        }
+
+        // 渲染滚动名字列表
+        function renderRollingNames() {
+            const rollingNames = document.getElementById('rollingNames');
+            rollingNames.innerHTML = '';
+            
+            // 为了滚动效果更流畅，我们复制几份学生列表
+            const repeatedStudents = [...students, ...students, ...students];
+            
+            repeatedStudents.forEach((student, index) => {
+                const nameItem = document.createElement('div');
+                nameItem.className = 'name-item';
+                nameItem.id = `name-${index}`;
+                nameItem.textContent = student.name;
+                rollingNames.appendChild(nameItem);
+            });
+            
+            // 设置初始位置
+            updateRollingPosition();
+        }
+
+        // 更新滚动位置
+        function updateRollingPosition() {
+            const rollingNames = document.getElementById('rollingNames');
+            const itemHeight = 150; // 每个名字项的高度
+            const offset = -currentRollIndex * itemHeight;
+            rollingNames.style.transform = `translateY(${offset}px)`;
+            
+            // 移除所有激活状态
+            document.querySelectorAll('.name-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 设置当前项为激活状态
+            const currentItem = document.getElementById(`name-${currentRollIndex}`);
+            if (currentItem) {
+                currentItem.classList.add('active');
+            }
+        }
+
+        // 开始滚动
+        function startRolling() {
+            if (isRolling) return;
+            
+            isRolling = true;
+            document.getElementById('startRollBtn').disabled = true;
+            document.getElementById('stopRollBtn').disabled = false;
+            
+            // 开始滚动
+            rollInterval = setInterval(() => {
+                currentRollIndex = (currentRollIndex + 1) % (students.length * 3);
+                updateRollingPosition();
+            }, rollSpeed);
+        }
+
+        // 停止滚动
+        function stopRolling() {
+            if (!isRolling) return;
+            
+            // 清除滚动间隔
+            clearInterval(rollInterval);
+            isRolling = false;
+            document.getElementById('startRollBtn').disabled = false;
+            document.getElementById('stopRollBtn').disabled = true;
+            
+            // 获取当前显示的学生（取模回到原始数组范围）
+            const selectedIndex = currentRollIndex % students.length;
+            currentStudent = students[selectedIndex];
+            
+            // 更新显示
+            document.getElementById('studentInfo').textContent = `学号: ${currentStudent.studentId}`;
+            
+            // 高亮显示选中的学生卡片
+            highlightSelectedStudent(selectedIndex);
+        }
+
+        // 高亮选中的学生
+        function highlightSelectedStudent(index) {
+            const studentCards = document.querySelectorAll('.student-card');
+            studentCards.forEach((card, i) => {
+                if (i === index) {
+                    card.style.backgroundColor = '#CD853F';
+                    card.style.color = 'white';
+                } else {
+                    card.style.backgroundColor = '';
+                    card.style.color = '';
+                }
+            });
+        }
+
+        // 渲染学生列表
+        function renderStudentList() {
+            const studentList = document.getElementById('studentList');
+            studentList.innerHTML = '';
+            
+            students.forEach((student, index) => {
+                const studentCard = document.createElement('div');
+                studentCard.className = 'student-card';
+                
+                // 根据出席状态添加样式
+                if (student.present) {
+                    studentCard.classList.add('present');
+                } else {
+                    studentCard.classList.add('absent');
+                }
+                
+                studentCard.innerHTML = `
+                    <div class="student-name">${student.name}</div>
+                    <div class="student-id">${student.studentId}</div>
+                    <div class="attendance-buttons">
+                        <button class="attendance-btn present-btn" data-id="${student.id}" data-action="present">出席</button>
+                        <button class="attendance-btn absent-btn" data-id="${student.id}" data-action="absent">缺席</button>
+                    </div>
+                    <div class="status-indicator ${student.present ? 'status-present' : 'status-absent'}">
+                        ${student.present ? '已出席' : '未出席'}
+                    </div>
+                `;
+                
+                studentList.appendChild(studentCard);
+            });
+            
+            // 为按钮添加事件监听器
+            document.querySelectorAll('.present-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const studentId = parseInt(e.target.getAttribute('data-id'));
+                    markStudentPresent(studentId);
+                });
+            });
+            
+            document.querySelectorAll('.absent-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const studentId = parseInt(e.target.getAttribute('data-id'));
+                    markStudentAbsent(studentId);
+                });
+            });
+        }
+
+        // 标记单个学生出席
+        function markStudentPresent(studentId) {
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                student.present = true;
+                renderStudentList();
+                updateStats();
+            }
+        }
+
+        // 标记单个学生缺席
+        function markStudentAbsent(studentId) {
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                student.present = false;
+                renderStudentList();
+                updateStats();
+            }
+        }
+
+        // 标记全部出席
+        function markAllPresent() {
+            students.forEach(student => {
+                student.present = true;
+            });
+            renderStudentList();
+            updateStats();
+        }
+
+        // 标记全部缺席
+        function markNonePresent() {
+            students.forEach(student => {
+                student.present = false;
+            });
+            renderStudentList();
+            updateStats();
+        }
+
+        // 重置出勤
+        function resetAttendance() {
+            students.forEach(student => {
+                student.present = false;
+            });
+            currentStudent = null;
+            document.getElementById('studentInfo').textContent = '-';
+            renderStudentList();
+            updateStats();
+            
+            // 重置高亮
+            const studentCards = document.querySelectorAll('.student-card');
+            studentCards.forEach(card => {
+                card.style.backgroundColor = '';
+                card.style.color = '';
+            });
+            
+            // 重置滚动状态
+            if (isRolling) {
+                clearInterval(rollInterval);
+                isRolling = false;
+                document.getElementById('startRollBtn').disabled = false;
+                document.getElementById('stopRollBtn').disabled = true;
+            }
+            
+            currentRollIndex = 0;
+            updateRollingPosition();
+        }
+
+        // 更新统计信息
+        function updateStats() {
+            const presentCount = students.filter(s => s.present).length;
+            const totalCount = students.length;
+            const attendanceRate = totalCount > 0 ? ((presentCount / totalCount) * 100).toFixed(1) : 0;
+            
+            document.getElementById('presentCount').textContent = presentCount;
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('attendanceRate').textContent = `${attendanceRate}%`;
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
