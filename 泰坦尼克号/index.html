@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>泰坦尼克号数据可视化 - 复古蓝色主题</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --dark-blue: #0a2c4e;
+            --medium-blue: #1a3a5f;
+            --light-blue: #2a4a7a;
+            --pale-blue: #4a6b9a;
+            --accent-blue: #5a8bb5;
+            --text-light: #e8f1f5;
+            --text-gray: #a0b8c9;
+            --border-blue: #1e4a7a;
+        }
+        
+        body {
+            background-color: #0c1a2d;
+            background-image: linear-gradient(to bottom, #0c1a2d, #15253d);
+            color: var(--text-light);
+            font-family: 'Times New Roman', serif;
+            padding-bottom: 30px;
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        .header-section {
+            background-color: rgba(10, 44, 78, 0.85);
+            border: 1px solid var(--border-blue);
+            border-radius: 4px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .header-section h1 {
+            color: var(--text-light);
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            letter-spacing: 1px;
+        }
+        
+        .header-section .subtitle {
+            color: var(--accent-blue);
+            font-size: 1.4rem;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .header-section .intro-text {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: justify;
+        }
+        
+        .chart-container {
+            background-color: rgba(26, 58, 95, 0.7);
+            border: 1px solid var(--border-blue);
+            border-radius: 4px;
+            padding: 20px 15px 15px 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 480px; /* 统一高度 */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chart-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .chart-title {
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-blue);
+            padding-bottom: 8px;
+            height: 50px; /* 固定标题高度 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 350px; /* 统一图表区域高度 */
+            flex: 1;
+        }
+        
+        .footer-section {
+            background-color: rgba(10, 44, 78, 0.85);
+            border: 1px solid var(--border-blue);
+            border-radius: 4px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer-section h3 {
+            color: var(--accent-blue);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .footer-section .conclusion-text {
+            color: var(--text-gray);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            text-align: justify;
+        }
+        
+        .footer-section .memorial {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-blue);
+            color: var(--accent-blue);
+            font-style: italic;
+        }
+        
+        .row.clearfix {
+            margin-bottom: 20px;
+        }
+        
+        /* 自定义图表颜色 */
+        .chartjs-render-monitor {
+            filter: sepia(0.2) hue-rotate(190deg) saturate(0.9);
+        }
+        
+        /* 复古装饰元素 */
+        .ornament {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: var(--accent-blue);
+            transform: rotate(45deg);
+            margin: 0 10px;
+            opacity: 0.7;
+        }
+        
+        .header-ornaments {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header-section .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .chart-container {
+                margin-bottom: 20px;
+                height: 450px; /* 移动端稍小的高度 */
+            }
+            
+            .chart-wrapper {
+                height: 320px; /* 移动端稍小的图表高度 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头区 -->
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="header-section">
+                    <h1>泰坦尼克号沉没数据可视化</h1>
+                    <div class="header-ornaments">
+                        <div class="ornament"></div>
+                        <div class="ornament" style="width: 10px; height: 10px;"></div>
+                        <div class="ornament"></div>
+                    </div>
+                    <div class="subtitle">1912年4月15日的悲剧 - 数据分析与纪念</div>
+                    <div class="intro-text">
+                        <p>1912年4月10日，号称"永不沉没"的泰坦尼克号从南安普敦港启航，开始其处女航。四天后的夜晚，这艘豪华邮轮在北大西洋撞上冰山，最终在4月15日凌晨沉没。船上约2224名乘客和船员中，超过1500人遇难，成为近代最严重的和平时期船难。</p>
+                        <p>本可视化分析基于泰坦尼克号乘客与船员数据，从多个维度探索这场悲剧中的生存模式、人群特征及相关因素。通过数据，我们试图理解在灾难面前，哪些因素影响了生还机会，以纪念那些逝去的生命。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 内容区 - 第一行图表 -->
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="row clearfix">
+                    <div class="col-md-4 column">
+                        <div class="chart-container">
+                            <div class="chart-title">乘客生存率分析</div>
+                            <div class="chart-wrapper">
+                                <canvas id="survivalChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 column">
+                        <div class="chart-container">
+                            <div class="chart-title">各船舱等级生存情况</div>
+                            <div class="chart-wrapper">
+                                <canvas id="classSurvivalChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 column">
+                        <div class="chart-container">
+                            <div class="chart-title">性别与生存关系</div>
+                            <div class="chart-wrapper">
+                                <canvas id="genderSurvivalChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 内容区 - 第二行图表 -->
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="row clearfix">
+                    <div class="col-md-4 column">
+                        <div class="chart-container">
+                            <div class="chart-title">年龄分布与生存率</div>
+                            <div class="chart-wrapper">
+                                <canvas id="ageChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 column">
+                        <div class="chart-container">
+                            <div class="chart-title">登船港口乘客分布</div>
+                            <div class="chart-wrapper">
+                                <canvas id="embarkedChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 column">
+                        <div class="chart-container">
+                            <div class="chart-title">家庭成员数量与生存率</div>
+                            <div class="chart-wrapper">
+                                <canvas id="familyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 尾区 -->
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="footer-section">
+                    <h3>数据背后的生命故事</h3>
+                    <div class="conclusion-text">
+                        <p>泰坦尼克号的数据揭示了一个残酷的现实：在这场灾难中，生存机会并非均等。头等舱乘客的生还率(62.9%)显著高于三等舱乘客(24.2%)，体现了当时社会的阶层差异。妇女和儿童优先的撤离原则确实得到了一定执行，女性生还率(74.2%)远高于男性(18.9%)。</p>
+                        <p>然而，数据也显示，即使在同一群体中，生存机会也受到多种因素影响。例如，有1-2名家庭成员同行的乘客生存率较高，而独自旅行或来自大家庭的乘客生存率较低。年龄分布显示儿童确实得到了优先救援，但仍有大量儿童未能生还。</p>
+                        <p>这些数据图表不仅呈现了统计数字，更反映了1912年那个寒冷夜晚的生命抉择。每个数字背后都是一条鲜活的生命，一个破碎的家庭。泰坦尼克号的悲剧至今仍提醒我们，在技术进步的同时，人性、公平与生命尊严的价值永恒不变。</p>
+                    </div>
+                    <div class="memorial">
+                        <p>谨以此数据可视化纪念泰坦尼克号上所有乘客与船员</p>
+                        <p>1912年4月15日 - 愿逝者安息，历史不被遗忘</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 设置全局图表颜色
+        Chart.defaults.color = '#a0b8c9';
+        Chart.defaults.borderColor = '#1e4a7a';
+        
+        // 复古蓝色调色板
+        const bluePalette = {
+            darkBlue: 'rgba(10, 44, 78, 0.8)',
+            mediumBlue: 'rgba(26, 58, 95, 0.8)',
+            lightBlue: 'rgba(42, 74, 122, 0.8)',
+            paleBlue: 'rgba(74, 107, 154, 0.8)',
+            accentBlue: 'rgba(90, 139, 181, 0.8)',
+            green: 'rgba(100, 150, 120, 0.8)',
+            red: 'rgba(150, 100, 100, 0.8)'
+        };
+        
+        // 图表1: 乘客生存率分析
+        const survivalCtx = document.getElementById('survivalChart').getContext('2d');
+        const survivalChart = new Chart(survivalCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['遇难', '生还'],
+                datasets: [{
+                    data: [61.6, 38.4],
+                    backgroundColor: [bluePalette.darkBlue, bluePalette.accentBlue],
+                    borderColor: [bluePalette.lightBlue, bluePalette.paleBlue],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // 允许图表填充容器
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 13
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.parsed}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 图表2: 各船舱等级生存情况
+        const classSurvivalCtx = document.getElementById('classSurvivalChart').getContext('2d');
+        const classSurvivalChart = new Chart(classSurvivalCtx, {
+            type: 'bar',
+            data: {
+                labels: ['头等舱', '二等舱', '三等舱'],
+                datasets: [
+                    {
+                        label: '生还',
+                        data: [62.9, 47.3, 24.2],
+                        backgroundColor: bluePalette.accentBlue,
+                        borderColor: bluePalette.paleBlue,
+                        borderWidth: 1
+                    },
+                    {
+                        label: '遇难',
+                        data: [37.1, 52.7, 75.8],
+                        backgroundColor: bluePalette.darkBlue,
+                        borderColor: bluePalette.lightBlue,
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // 允许图表填充容器
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '百分比 (%)'
+                        },
+                        grid: {
+                            color: 'rgba(30, 74, 122, 0.2)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(30, 74, 122, 0.2)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 13
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 图表3: 性别与生存关系
+        const genderSurvivalCtx = document.getElementById('genderSurvivalChart').getContext('2d');
+        const genderSurvivalChart = new Chart(genderSurvivalCtx, {
+            type: 'pie',
+            data: {
+                labels: ['男性生还', '男性遇难', '女性生还', '女性遇难'],
+                datasets: [{
+                    data: [18.9, 81.1, 74.2, 25.8],
+                    backgroundColor: [
+                        bluePalette.accentBlue,
+                        bluePalette.darkBlue,
+                        bluePalette.paleBlue,
+                        bluePalette.mediumBlue
+                    ],
+                    borderColor: bluePalette.lightBlue,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // 允许图表填充容器
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.parsed}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 图表4: 年龄分布与生存率
+        const ageCtx = document.getElementById('ageChart').getContext('2d');
+        const ageChart = new Chart(ageCtx, {
+            type: 'line',
+            data: {
+                labels: ['0-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61+'],
+                datasets: [
+                    {
+                        label: '生还率 (%)',
+                        data: [58.1, 41.2, 35.6, 42.8, 38.5, 33.3, 25.0],
+                        backgroundColor: bluePalette.accentBlue + '20',
+                        borderColor: bluePalette.accentBlue,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3
+                    },
+                    {
+                        label: '平均生存率',
+                        data: [38.4, 38.4, 38.4, 38.4, 38.4, 38.4, 38.4],
+                        borderColor: bluePalette.paleBlue,
+                        borderWidth: 1,
+                        borderDash: [5, 5],
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // 允许图表填充容器
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '生存率 (%)'
+                        },
+                        grid: {
+                            color: 'rgba(30, 74, 122, 0.2)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '年龄组'
+                        },
+                        grid: {
+                            color: 'rgba(30, 74, 122, 0.2)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 13
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 图表5: 登船港口乘客分布
+        const embarkedCtx = document.getElementById('embarkedChart').getContext('2d');
+        const embarkedChart = new Chart(embarkedCtx, {
+            type: 'bar',
+            data: {
+                labels: ['南安普敦', '瑟堡', '皇后镇'],
+                datasets: [{
+                    label: '乘客数量',
+                    data: [644, 168, 77],
+                    backgroundColor: [
+                        bluePalette.darkBlue,
+                        bluePalette.mediumBlue,
+                        bluePalette.lightBlue
+                    ],
+                    borderColor: bluePalette.paleBlue,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // 允许图表填充容器
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '乘客数量'
+                        },
+                        grid: {
+                            color: 'rgba(30, 74, 122, 0.2)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(30, 74, 122, 0.2)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // 图表6: 家庭成员数量与生存率
+        const familyCtx = document.getElementById('familyChart').getContext('2d');
+        const familyChart = new Chart(familyCtx, {
+            type: 'radar',
+            data: {
+                labels: ['独自旅行', '1名家人', '2名家人', '3名家人', '4名家人', '5名以上家人'],
+                datasets: [
+                    {
+                        label: '生存率 (%)',
+                        data: [30.4, 55.2, 58.3, 25.0, 16.7, 8.3],
+                        backgroundColor: bluePalette.accentBlue + '30',
+                        borderColor: bluePalette.accentBlue,
+                        borderWidth: 2,
+                        pointBackgroundColor: bluePalette.accentBlue
+                    },
+                    {
+                        label: '乘客比例 (%)',
+                        data: [60.4, 16.9, 9.5, 5.2, 4.5, 3.5],
+                        backgroundColor: bluePalette.paleBlue + '30',
+                        borderColor: bluePalette.paleBlue,
+                        borderWidth: 2,
+                        pointBackgroundColor: bluePalette.paleBlue
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // 允许图表填充容器
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(30, 74, 122, 0.2)'
+                        },
+                        angleLines: {
+                            color: 'rgba(30, 74, 122, 0.2)'
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 调整图表大小以适应容器
+        window.addEventListener('resize', function() {
+            survivalChart.resize();
+            classSurvivalChart.resize();
+            genderSurvivalChart.resize();
+            ageChart.resize();
+            embarkedChart.resize();
+            familyChart.resize();
+        });
+    </script>
+</body>
+</html>
