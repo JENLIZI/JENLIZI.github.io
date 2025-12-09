@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的作品 - 智识库</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4ecca3;
+            --primary-dark: #3da58a;
+            --secondary-color: #2c3e50;
+            --text-color: #333;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --card-bg: #ffffff;
+            --category-bg: rgba(78, 204, 163, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 头部样式优化 */
+        header {
+            background: linear-gradient(135deg, var(--secondary-color), #1a2530);
+            color: var(--white);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .logo:hover i {
+            transform: rotate(15deg);
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), #67d9b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .user-actions a {
+            color: var(--white);
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-actions a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .banner {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 20px;
+        }
+
+        .banner h2 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #e0e0e0;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+        }
+
+        /* 导航栏样式优化 */
+        nav {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            padding: 20px 30px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            position: relative;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* 主体内容区优化 */
+        main {
+            flex: 1;
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* 分类筛选 */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--white);
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        /* 作品网格布局 */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        /* 作品卡片样式 */
+        .portfolio-item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .portfolio-img {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .portfolio-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .portfolio-item:hover .portfolio-img img {
+            transform: scale(1.05);
+        }
+
+        .portfolio-info {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .portfolio-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+
+        .portfolio-info p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        .portfolio-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .portfolio-tag {
+            background: rgba(78, 204, 163, 0.1);
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* 页脚样式优化 */
+        footer {
+            background: var(--secondary-color);
+            color: var(--white);
+            padding: 50px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .footer-column p, .footer-column a {
+            color: #bdc3c7;
+            margin-bottom: 12px;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #95a5a6;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计优化 */
+        @media (max-width: 992px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                justify-content: center;
+            }
+
+            .user-actions {
+                justify-content: center;
+            }
+
+            .banner h2 {
+                font-size: 2.2rem;
+            }
+
+            .banner p {
+                font-size: 1.1rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+            }
+
+            .nav-item {
+                padding: 15px;
+                text-align: center;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .portfolio-img {
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .banner h2 {
+                font-size: 1.8rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部区域 -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <h1>智识库</h1>
+                </div>
+                <div class="user-actions">
+                    <a href="#"><i class="fas fa-user"></i> 登录</a>
+                    <a href="#"><i class="fas fa-user-plus"></i> 注册</a>
+                </div>
+            </div>
+            <div class="banner">
+                <h2>我的作品集</h2>
+                <p>精选项目与创作成果展示</p>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 导航区域 -->
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <a href="index00.html" class="nav-item">首页</a>
+                <a href="index01.html" class="nav-item">常用工具</a>
+                <a href="index02.html" class="nav-item">提示词</a>
+                <a href="index03.html" class="nav-item active">我的作品</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主体内容区 -->
+    <main class="main-content">
+        <div class="container">
+            <div class="section-title">
+                <h2>作品展示</h2>
+                <p>精选项目与创作成果</p>
+            </div>
+            
+            <div class="filter-bar">
+                <button class="filter-btn active">全部</button>
+                <button class="filter-btn">UI/UX设计</button>
+                <button class="filter-btn">网页开发</button>
+                <button class="filter-btn">平面设计</button>
+                <button class="filter-btn">插画</button>
+                <button class="filter-btn">摄影</button>
+            </div>
+            
+            <div class="portfolio-grid">
+                <!-- 作品1 -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-img">
+                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="智能家居控制面板">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>智能家居控制面板</h3>
+                        <p>为智能家居系统设计的响应式控制界面，支持多设备管理和场景模式切换。</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">UI设计</span>
+                            <span class="portfolio-tag">响应式</span>
+                            <span class="portfolio-tag">物联网</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品2 -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-img">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="健康追踪应用">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>健康追踪应用</h3>
+                        <p>整合运动、饮食和睡眠数据的健康管理应用，提供个性化建议和进度追踪。</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">移动应用</span>
+                            <span class="portfolio-tag">健康科技</span>
+                            <span class="portfolio-tag">数据分析</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品3 -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-img">
+                        <img src="https://images.unsplash.com/photo-1463171379579-3fdfb86d6285?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="环保品牌视觉系统">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>环保品牌视觉系统</h3>
+                        <p>为可持续生活品牌设计的完整视觉识别系统，包含logo、色彩方案和应用示例。</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">品牌设计</span>
+                            <span class="portfolio-tag">VI系统</span>
+                            <span class="portfolio-tag">环保</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品4 -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-img">
+                        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="数据可视化仪表盘">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>数据可视化仪表盘</h3>
+                        <p>企业级销售数据分析平台，提供实时数据监控和交互式报表功能。</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">数据可视化</span>
+                            <span class="portfolio-tag">BI工具</span>
+                            <span class="portfolio-tag">React</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品5 -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-img">
+                        <img src="https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="未来城市插画系列">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>未来城市插画系列</h3>
+                        <p>描绘2070年可持续城市的数字插画系列，探索科技与自然共生的可能性。</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">数字艺术</span>
+                            <span class="portfolio-tag">插画</span>
+                            <span class="portfolio-tag">未来主义</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品6 -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-img">
+                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="教育平台UI设计">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>教育平台UI设计</h3>
+                        <p>在线编程学习平台的用户界面设计，注重学习路径可视化和交互反馈。</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">教育科技</span>
+                            <span class="portfolio-tag">UI/UX</span>
+                            <span class="portfolio-tag">学习体验</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品7 -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-img">
+                        <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="微距摄影集">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>微距摄影集</h3>
+                        <p>探索微观世界的摄影作品集，展现自然细节之美和抽象图案。</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">摄影</span>
+                            <span class="portfolio-tag">自然</span>
+                            <span class="portfolio-tag">微距</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品8 -->
+                <div class="portfolio-item fade-in">
+                    <div class="portfolio-img">
+                        <img src="https://images.unsplash.com/photo-1555066932-8727c6ee0e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="旅行博客设计">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>旅行博客设计</h3>
+                        <p>个人旅行博客的网站设计和开发，集成地图轨迹和多媒体内容展示。</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">网页设计</span>
+                            <span class="portfolio-tag">博客</span>
+                            <span class="portfolio-tag">旅行</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 页脚区域 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>关于智识库</h3>
+                    <p>智识库致力于打造个人知识管理平台，帮助用户高效整理、应用和分享知识，提升个人学习与工作效率。</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>快速链接</h3>
+                    <a href="index00.html">首页</a>
+                    <a href="index01.html">常用工具</a>
+                    <a href="index02.html">提示词库</a>
+                    <a href="index03.html">我的作品</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>联系我们</h3>
+                    <p><i class="fas fa-envelope"></i> contact@knowledgebase.com</p>
+                    <p><i class="fas fa-phone"></i> +86 123 4567 8910</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 北京市海淀区科技园区88号</p>
+                    
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 智识库知识平台 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 滚动动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        fadeInObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            fadeElements.forEach(element => {
+                fadeInObserver.observe(element);
+            });
+
+            // 分类筛选功能
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const portfolioItems = document.querySelectorAll('.portfolio-item');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 移除所有按钮的active类
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // 为当前按钮添加active类
+                    this.classList.add('active');
+                    
+                    const filterValue = this.textContent.trim();
+                    
+                    // 显示/隐藏作品卡片
+                    portfolioItems.forEach(item => {
+                        if (filterValue === '全部') {
+                            item.style.display = 'flex';
+                        } else {
+                            const tags = Array.from(item.querySelectorAll('.portfolio-tag')).map(tag => tag.textContent.trim());
+                            if (tags.includes(filterValue)) {
+                                item.style.display = 'flex';
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

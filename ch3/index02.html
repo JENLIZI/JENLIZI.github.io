@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创意提示词库 - 智识库</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4ecca3;
+            --primary-dark: #3da58a;
+            --secondary-color: #2c3e50;
+            --text-color: #333;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --card-bg: #ffffff;
+            --category-bg: rgba(78, 204, 163, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 头部样式优化 */
+        header {
+            background: linear-gradient(135deg, var(--secondary-color), #1a2530);
+            color: var(--white);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .logo:hover i {
+            transform: rotate(15deg);
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), #67d9b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .user-actions a {
+            color: var(--white);
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-actions a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .banner {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 20px;
+        }
+
+        .banner h2 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #e0e0e0;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+        }
+
+        /* 导航栏样式优化 */
+        nav {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            padding: 20px 30px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            position: relative;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* 主体内容区优化 */
+        main {
+            flex: 1;
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* 搜索框样式 */
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border-radius: 50px;
+            padding: 15px 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .search-box:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box i {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-right: 15px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            background: transparent;
+            color: var(--text-color);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-light);
+        }
+
+        /* 分类筛选 */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--white);
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        /* 提示词容器 */
+        .prompts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        /* 分类卡片样式 */
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: var(--category-bg);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .category-header i {
+            margin-right: 12px;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .prompts-list {
+            padding: 15px;
+            flex: 1;
+        }
+
+        /* 提示词项样式 */
+        .prompt-item {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .prompt-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .prompt-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .prompt-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: rgba(78, 204, 163, 0.1);
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* 页脚样式优化 */
+        footer {
+            background: var(--secondary-color);
+            color: var(--white);
+            padding: 50px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .footer-column p, .footer-column a {
+            color: #bdc3c7;
+            margin-bottom: 12px;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #95a5a6;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计优化 */
+        @media (max-width: 992px) {
+            .prompts-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                justify-content: center;
+            }
+
+            .user-actions {
+                justify-content: center;
+            }
+
+            .banner h2 {
+                font-size: 2.2rem;
+            }
+
+            .banner p {
+                font-size: 1.1rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+            }
+
+            .nav-item {
+                padding: 15px;
+                text-align: center;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .category-header {
+                padding: 15px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .banner h2 {
+                font-size: 1.8rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+
+            .prompts-container {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部区域 -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <h1>智识库</h1>
+                </div>
+                <div class="user-actions">
+                    <a href="#"><i class="fas fa-user"></i> 登录</a>
+                    <a href="#"><i class="fas fa-user-plus"></i> 注册</a>
+                </div>
+            </div>
+            <div class="banner">
+                <h2>创意提示词库</h2>
+                <p>精选各类提示词，助您激发灵感与创造力</p>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 导航区域 -->
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <a href="index00.html" class="nav-item">首页</a>
+                <a href="index01.html" class="nav-item">常用工具</a>
+                <a href="index02.html" class="nav-item active">提示词</a>
+                <a href="index03.html" class="nav-item">我的作品</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主体内容区 -->
+    <main class="main-content">
+        <div class="container">
+            <div class="section-title">
+                <h2>创意提示词库</h2>
+                <p>精选各类提示词，助您激发灵感与创造力</p>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="搜索提示词...">
+                </div>
+            </div>
+            
+            <div class="category-filters">
+                <button class="filter-btn active">全部</button>
+                <button class="filter-btn">写作创作</button>
+                <button class="filter-btn">编程开发</button>
+                <button class="filter-btn">艺术设计</button>
+                <button class="filter-btn">商业策略</button>
+                <button class="filter-btn">学习教育</button>
+                <button class="filter-btn">生活健康</button>
+            </div>
+            
+            <div class="prompts-container">
+                <!-- 写作提示词 -->
+                <div class="category-card fade-in">
+                    <div class="category-header">
+                        <i class="fas fa-pen-fancy"></i> 写作创作
+                    </div>
+                    <div class="prompts-list">
+                        <div class="prompt-item">
+                            <div class="prompt-text">创作一篇关于人工智能对未来教育影响的文章，重点讨论个性化学习和教师角色的转变。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">教育</span>
+                                <span class="tag">科技</span>
+                                <span class="tag">未来趋势</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">写一个科幻短篇故事，背景设定在人类与AI共同探索宇宙的时代，主角是一名AI伦理学家。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">科幻</span>
+                                <span class="tag">伦理</span>
+                                <span class="tag">冒险</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">撰写一篇关于可持续城市发展的议论文，分析绿色建筑、公共交通和循环经济的作用。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">环保</span>
+                                <span class="tag">城市规划</span>
+                                <span class="tag">可持续发展</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 编程提示词 -->
+                <div class="category-card fade-in">
+                    <div class="category-header">
+                        <i class="fas fa-code"></i> 编程开发
+                    </div>
+                    <div class="prompts-list">
+                        <div class="prompt-item">
+                            <div class="prompt-text">编写一个Python函数，使用递归算法计算斐波那契数列的第n项，并添加缓存优化性能。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">算法</span>
+                                <span class="tag">递归</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">设计一个React组件，实现可折叠的侧边栏菜单，支持多级子菜单和图标展示。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">React</span>
+                                <span class="tag">UI组件</span>
+                                <span class="tag">响应式</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">创建一个Node.js API端点，使用MongoDB存储用户数据，实现JWT身份验证和密码加密。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">Node.js</span>
+                                <span class="tag">API</span>
+                                <span class="tag">安全</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 设计提示词 -->
+                <div class="category-card fade-in">
+                    <div class="category-header">
+                        <i class="fas fa-palette"></i> 艺术设计
+                    </div>
+                    <div class="prompts-list">
+                        <div class="prompt-item">
+                            <div class="prompt-text">设计一个极简主义风格的手机应用图标，主题是"环保回收"，使用绿色和蓝色为主色调。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">UI设计</span>
+                                <span class="tag">图标</span>
+                                <span class="tag">极简主义</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">创作一幅数字绘画，描绘未来城市中人与自然和谐共生的场景，包含垂直花园和悬浮交通工具。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">数字艺术</span>
+                                <span class="tag">未来城市</span>
+                                <span class="tag">环保</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">设计一套品牌视觉系统，为一家专注于健康饮食的初创公司，包含logo、色彩方案和字体选择。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">品牌设计</span>
+                                <span class="tag">VI系统</span>
+                                <span class="tag">健康</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 商业提示词 -->
+                <div class="category-card fade-in">
+                    <div class="category-header">
+                        <i class="fas fa-chart-line"></i> 商业策略
+                    </div>
+                    <div class="prompts-list">
+                        <div class="prompt-item">
+                            <div class="prompt-text">为一家本地咖啡店制定社交媒体营销策略，目标是在三个月内将线上订单量提高30%。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">营销</span>
+                                <span class="tag">社交媒体</span>
+                                <span class="tag">本地商业</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">分析电动汽车行业的竞争格局，识别主要玩家、市场趋势和潜在进入者的机会。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">行业分析</span>
+                                <span class="tag">竞争策略</span>
+                                <span class="tag">新兴技术</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">制定一个员工培训计划，帮助传统制造企业员工适应数字化转型，提升数字技能。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">人力资源</span>
+                                <span class="tag">数字化转型</span>
+                                <span class="tag">培训</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 教育提示词 -->
+                <div class="category-card fade-in">
+                    <div class="category-header">
+                        <i class="fas fa-graduation-cap"></i> 学习教育
+                    </div>
+                    <div class="prompts-list">
+                        <div class="prompt-item">
+                            <div class="prompt-text">设计一个面向小学生的编程启蒙课程，使用游戏化教学方式，涵盖基础逻辑和简单算法。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">教育</span>
+                                <span class="tag">编程</span>
+                                <span class="tag">游戏化</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">创建一个30天的学习计划，帮助初学者掌握Python数据分析基础，包括NumPy和Pandas。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">学习计划</span>
+                                <span class="tag">Python</span>
+                                <span class="tag">数据分析</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">开发一个记忆技巧指南，帮助学生高效记忆历史事件时间线，使用联想记忆法和视觉化技巧。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">学习方法</span>
+                                <span class="tag">记忆技巧</span>
+                                <span class="tag">历史</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生活提示词 -->
+                <div class="category-card fade-in">
+                    <div class="category-header">
+                        <i class="fas fa-heart"></i> 生活健康
+                    </div>
+                    <div class="prompts-list">
+                        <div class="prompt-item">
+                            <div class="prompt-text">制定一个为期四周的家庭健身计划，无需器械，每天20分钟，适合办公室久坐人群。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">健身</span>
+                                <span class="tag">健康</span>
+                                <span class="tag">家庭</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">设计一个每周膳食计划，满足素食者的营养需求，包含蛋白质、铁和维生素B12的充足来源。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">饮食</span>
+                                <span class="tag">营养</span>
+                                <span class="tag">素食</span>
+                            </div>
+                        </div>
+                        <div class="prompt-item">
+                            <div class="prompt-text">创建一个晨间例行程序，帮助提高全天生产力，包含冥想、计划和轻度运动。</div>
+                            <div class="prompt-tags">
+                                <span class="tag">习惯</span>
+                                <span class="tag">生产力</span>
+                                <span class="tag">日常</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 页脚区域 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>关于智识库</h3>
+                    <p>智识库致力于打造个人知识管理平台，帮助用户高效整理、应用和分享知识，提升个人学习与工作效率。</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>快速链接</h3>
+                    <a href="index00.html">首页</a>
+                    <a href="index01.html">常用工具</a>
+                    <a href="index02.html">提示词库</a>
+                    <a href="index03.html">我的作品</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>联系我们</h3>
+                    <p><i class="fas fa-envelope"></i> contact@knowledgebase.com</p>
+                    <p><i class="fas fa-phone"></i> +86 123 4567 8910</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 北京市海淀区科技园区88号</p>
+                    
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 智识库知识平台 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 滚动动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        fadeInObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            fadeElements.forEach(element => {
+                fadeInObserver.observe(element);
+            });
+
+            // 分类筛选功能
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const categoryCards = document.querySelectorAll('.category-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 移除所有按钮的active类
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // 为当前按钮添加active类
+                    this.classList.add('active');
+                    
+                    const filterValue = this.textContent.trim();
+                    
+                    // 显示/隐藏分类卡片
+                    categoryCards.forEach(card => {
+                        if (filterValue === '全部') {
+                            card.style.display = 'flex';
+                        } else {
+                            const categoryName = card.querySelector('.category-header').textContent.trim();
+                            if (categoryName.includes(filterValue)) {
+                                card.style.display = 'flex';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+
+            // 搜索功能
+            const searchInput = document.querySelector('.search-box input');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                categoryCards.forEach(card => {
+                    const promptItems = card.querySelectorAll('.prompt-item');
+                    let hasMatch = false;
+                    
+                    promptItems.forEach(item => {
+                        const promptText = item.querySelector('.prompt-text').textContent.toLowerCase();
+                        const tags = Array.from(item.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+                        
+                        if (promptText.includes(searchTerm) || tags.some(tag => tag.includes(searchTerm))) {
+                            item.style.display = 'block';
+                            hasMatch = true;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                    
+                    // 如果分类中有匹配项，显示整个分类卡片
+                    if (hasMatch) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
