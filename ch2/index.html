@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>从SEO到GEO：知识演进之路</title>
+    <style>
+        /* 复古风格基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body {
+            background-color: #f5f1e6;
+            color: #3a3327;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d4c9b0' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+            overflow: hidden;
+        }
+        
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* 幻灯片区域 */
+        .slides-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            background-color: rgba(255, 253, 245, 0.85);
+            border: 12px double #8b7355;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+        
+        /* 复古装饰元素 */
+        .vintage-border {
+            position: absolute;
+            border: 1px solid #8b7355;
+            pointer-events: none;
+        }
+        
+        .border-top {
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+        }
+        
+        .border-bottom {
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+        }
+        
+        .border-left {
+            left: 20px;
+            top: 20px;
+            bottom: 20px;
+            width: 2px;
+        }
+        
+        .border-right {
+            right: 20px;
+            top: 20px;
+            bottom: 20px;
+            width: 2px;
+        }
+        
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #8b7355;
+            pointer-events: none;
+        }
+        
+        .corner-tl {
+            top: 18px;
+            left: 18px;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .corner-tr {
+            top: 18px;
+            right: 18px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        
+        .corner-bl {
+            bottom: 18px;
+            left: 18px;
+            border-right: none;
+            border-top: none;
+        }
+        
+        .corner-br {
+            bottom: 18px;
+            right: 18px;
+            border-left: none;
+            border-top: none;
+        }
+        
+        /* 幻灯片内容样式 */
+        .slide-title {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #5d4c3a;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .slide-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #8b7355, transparent);
+        }
+        
+        .slide-content {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .slide-list {
+            text-align: left;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.3rem;
+        }
+        
+        .slide-list li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .slide-list li:before {
+            content: '◆';
+            color: #8b7355;
+            position: absolute;
+            left: 0;
+        }
+        
+        /* 导航按钮 */
+        .nav-buttons {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 10;
+        }
+        
+        .nav-btn {
+            background: #8b7355;
+            color: #f5f1e6;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #5d4c3a;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-btn:hover {
+            background: #5d4c3a;
+            transform: translateY(-2px);
+        }
+        
+        /* 页码指示器 */
+        .page-indicator {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #5d4c3a;
+        }
+        
+        /* 特殊幻灯片样式 */
+        .intro-slide {
+            background: linear-gradient(135deg, #f5f1e6 0%, #e8dfca 100%);
+        }
+        
+        .conclusion-slide {
+            background: linear-gradient(135deg, #e8dfca 0%, #d4c9b0 100%);
+        }
+        
+        /* 简单图标容器 */
+        .icon-container {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(139, 115, 85, 0.1);
+            border: 2px solid #8b7355;
+            border-radius: 50%;
+        }
+        
+        .simple-icon {
+            font-size: 4rem;
+            color: #8b7355;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .slide-title {
+                font-size: 2.5rem;
+            }
+            
+            .slide-content, .slide-list {
+                font-size: 1.1rem;
+            }
+            
+            .icon-container {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .simple-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 复古边框装饰 -->
+        <div class="vintage-border border-top"></div>
+        <div class="vintage-border border-bottom"></div>
+        <div class="vintage-border border-left"></div>
+        <div class="vintage-border border-right"></div>
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        
+        <!-- 幻灯片容器 -->
+        <div class="slides-container">
+            <!-- 幻灯片1: 标题页 -->
+            <div class="slide intro-slide active">
+                <h1 class="slide-title">从SEO到GEO</h1>
+                <p class="slide-content">搜索引擎优化到地理空间优化的知识演进</p>
+                <div class="icon-container">
+                    <div class="simple-icon">🌐</div>
+                </div>
+                <p class="slide-content" style="margin-top: 20px;">探索数字营销与地理信息的交汇点</p>
+            </div>
+            
+            <!-- 幻灯片2: SEO基础 -->
+            <div class="slide">
+                <h2 class="slide-title">什么是SEO？</h2>
+                <div class="icon-container">
+                    <div class="simple-icon">🔍</div>
+                </div>
+                <p class="slide-content">搜索引擎优化（SEO）是通过优化网站内容和结构，提高网站在搜索引擎自然搜索结果中排名的过程。</p>
+                <ul class="slide-list">
+                    <li>提高网站在搜索引擎中的可见性</li>
+                    <li>增加有针对性的有机流量</li>
+                    <li>建立网站权威性和可信度</li>
+                    <li>长期可持续的营销策略</li>
+                </ul>
+            </div>
+            
+            <!-- 幻灯片3: SEO核心要素 -->
+            <div class="slide">
+                <h2 class="slide-title">SEO的核心要素</h2>
+                <div class="icon-container">
+                    <div class="simple-icon">⚙️</div>
+                </div>
+                <ul class="slide-list">
+                    <li><strong>技术SEO</strong>：网站速度、移动友好性、结构化数据</li>
+                    <li><strong>内容SEO</strong>：关键词研究、高质量内容、用户体验</li>
+                    <li><strong>站外SEO</strong>：反向链接建设、品牌提及、社交媒体</li>
+                    <li><strong>本地SEO</strong>：Google My Business、本地引用、评价管理</li>
+                </ul>
+            </div>
+            
+            <!-- 幻灯片4: 什么是GEO？ -->
+            <div class="slide">
+                <h2 class="slide-title">什么是GEO？</h2>
+                <div class="icon-container">
+                    <div class="simple-icon">📍</div>
+                </div>
+                <p class="slide-content">地理空间优化（GEO）是利用地理位置数据优化数字营销策略的过程，将位置智能融入营销决策。</p>
+                <ul class="slide-list">
+                    <li>基于位置的个性化内容</li>
+                    <li>地理定向广告</li>
+                    <li>本地搜索优化</li>
+                    <li>位置数据分析</li>
+                </ul>
+            </div>
+            
+            <!-- 幻灯片5: SEO到GEO的演进 -->
+            <div class="slide">
+                <h2 class="slide-title">从SEO到GEO的演进</h2>
+                <div class="icon-container">
+                    <div class="simple-icon">📈</div>
+                </div>
+                <p class="slide-content">随着移动设备的普及和位置技术的发展，SEO逐渐融入了地理位置维度，演变为更全面的GEO策略。</p>
+                <ul class="slide-list">
+                    <li><strong>早期SEO</strong>：关键词密度、元标签优化</li>
+                    <li><strong>现代SEO</strong>：用户体验、E-A-T（专业、权威、可信）</li>
+                    <li><strong>GEO整合</strong>：位置信号、本地搜索、超本地化内容</li>
+                    <li><strong>未来趋势</strong>：AR/VR整合、语音搜索优化、AI驱动个性化</li>
+                </ul>
+            </div>
+            
+            <!-- 幻灯片6: GEO的应用场景 -->
+            <div class="slide">
+                <h2 class="slide-title">GEO的应用场景</h2>
+                <div class="icon-container">
+                    <div class="simple-icon">🏪</div>
+                </div>
+                <ul class="slide-list">
+                    <li><strong>零售业</strong>：基于位置的促销、店铺流量分析</li>
+                    <li><strong>旅游业</strong>：个性化旅行推荐、地理位置内容</li>
+                    <li><strong>房地产</strong>：社区数据分析、位置价值评估</li>
+                    <li><strong>本地服务</strong>：服务区域优化、竞争分析</li>
+                    <li><strong>活动营销</strong>：基于位置的活动推广、参与度预测</li>
+                </ul>
+            </div>
+            
+            <!-- 幻灯片7: 实施策略 -->
+
+            <div class="slide">
+                <h2 class="slide-title">SEO到GEO的实施策略</h2>
+                <div class="icon-container">
+                    <div class="simple-icon">📋</div>
+                </div>
+                <ul class="slide-list">
+                    <li>进行全面的位置关键词研究</li>
+                    <li>优化Google My Business和其他本地目录</li>
+                    <li>创建地理位置特定的内容</li>
+                    <li>实施结构化数据标记（Schema）</li>
+                    <li>利用分析工具跟踪位置表现</li>
+                    <li>整合线上线下营销数据</li>
+                </ul>
+            </div>
+            
+            <!-- 幻灯片8: 总结 -->
+            <div class="slide conclusion-slide">
+                <h2 class="slide-title">关键要点</h2>
+                <div class="icon-container">
+                    <div class="simple-icon">🎯</div>
+                </div>
+                <p class="slide-content">SEO是数字营销的基础，而GEO是其在位置智能时代的自然演进。</p>
+                <ul class="slide-list">
+                    <li>地理位置已成为搜索算法的重要排名因素</li>
+                    <li>个性化、本地化的用户体验是未来的关键</li>
+                    <li>成功策略需要整合SEO最佳实践与位置数据</li>
+                    <li>持续测试和优化是保持竞争力的必要条件</li>
+                </ul>
+                <p class="slide-content" style="margin-top: 30px; font-style: italic;">"在正确的时间、正确的地点，提供正确的内容"</p>
+            </div>
+        </div>
+        
+        <!-- 导航按钮 -->
+        <div class="nav-buttons">
+            <button id="prev-btn" class="nav-btn">上一页</button>
+            <button id="next-btn" class="nav-btn">下一页</button>
+        </div>
+        
+        <!-- 页码指示器 -->
+        <div class="page-indicator">
+            <span id="current-page">1</span> / <span id="total-pages">8</span>
+        </div>
+    </div>
+
+    <script>
+        // 幻灯片控制逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const currentPageEl = document.getElementById('current-page');
+            const totalPagesEl = document.getElementById('total-pages');
+            
+            let currentSlide = 0;
+            totalPagesEl.textContent = slides.length;
+            
+            // 更新幻灯片显示
+            function updateSlides() {
+                slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === currentSlide);
+                });
+                currentPageEl.textContent = currentSlide + 1;
+                
+                // 更新按钮状态
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === slides.length - 1;
+            }
+            
+            // 下一张幻灯片
+            nextBtn.addEventListener('click', function() {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    updateSlides();
+                }
+            });
+            
+            // 上一张幻灯片
+            prevBtn.addEventListener('click', function() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateSlides();
+                }
+            });
+            
+            // 键盘导航
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        updateSlides();
+                    }
+                } else if (e.key === 'ArrowLeft') {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        updateSlides();
+                    }
+                }
+            });
+            
+            // 初始更新
+            updateSlides();
+        });
+    </script>
+</body>
+</html>
+
